@@ -1,0 +1,135 @@
+﻿@model IEnumerable<SoftVersionControl.Models.SoftName>
+
+<style>
+    table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+        border-bottom-width: 0;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    #modalSuathongtinphanmem .modal-dialog {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .table td, .table th {
+        padding: 0.5rem;
+    }
+
+    table.dataTable > tbody > tr.child ul.dtr-details {
+        text-align: left;
+    }
+
+    div:where(.swal2-container) .swal2-html-container {
+        overflow: hidden;
+    }
+</style>
+<div class="modal-header" style="background:#F5F5F5">
+    <h4 class="modal-title" style="font-size:medium">
+        <i style="color:orange" class="fa fa-folder-open fa-fw" aria-hidden="true"></i>
+        <span class="modal-title-content">???</span>
+    </h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <table id="table" class="table table-hover table-responsive-lg" style="font-size:smaller">
+        <thead>
+            <tr style="font-size:smaller; text-align:center">
+                <th>
+                    Tên phần mềm
+                </th>
+                <th class="col-2">
+                    Version mới nhất
+                </th>
+                <th class="col-3">
+                    Chức năng
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="font-size:smaller; text-align:center">
+                    <td style="font-size:medium">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td style="font-size:small">
+                        @if (item.Softwares.Any())
+                        {
+                            @Html.DisplayFor(modelItem => item.Softwares.OrderByDescending(s => s.Version).FirstOrDefault().Version)
+                        }
+                        else
+                        {
+                            <span style="font-size:smaller" class="badge bg-gradient-danger">Không có dữ liệu</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group btn-block ">
+                            <button type="button" class="btn btn-xs btn-default btnXemchitiet" style="font-size:small"
+                                data-name="@item.Name"
+                                data-id="@item.Id">
+                                <i style="color:#17A2B8" class="fa fa-info fa-fw "></i> Chi tiết
+                            </button>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-cog fa-fw"> </i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item btnDownload" href="#"
+                                   data-name="@item.Name"
+                                   data-id="@item.Id">
+                                        <i style="color:green" class="fas fa-download fa-fw"> </i> Tải phần mềm
+                                    </a>
+                                    <a class="dropdown-item btnEdit" href="#" data-id="@item.Id">
+                                        <i style="color:orange" class="fas fa-pen fa-fw"></i> Sửa thông tin
+                                    </a>
+                                    <a class="dropdown-item btnDelete" href="#" data-id="@item.Id">
+                                        <i style="color:red" class="fas fa-trash fa-fw"></i> Xoá phần mềm
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#table").DataTable({
+            language: {
+                processing: "Đang tải dữ liệu...",
+                search: "Tìm kiếm",
+                lengthMenu: "Điều chỉnh số lượng bản ghi trên 1 trang _MENU_ ",
+                info: "Bản ghi từ _START_ đến _END_ - Tổng số _TOTAL_ bản ghi",
+                infoEmpty: "Không có dữ liệu",
+                infoFiltered: "(Trong tổng số _MAX_ bản ghi)",
+                loadingRecords: "",
+                zeroRecords: "Không tìm thấy bản ghi phù hợp",
+                emptyTable: "Không có dữ liệu",
+                paginate: {
+                    first: "Trang đầu",
+                    previous: "Trang trước",
+                    next: "Trang sau",
+                    last: "Trang cuối"
+                },
+                aria: {
+                    sortAscending: ": Đang sắp xếp theo column",
+                    sortDescending: ": Đang sắp xếp theo column",
+                }
+            },
+            "responsive": true, "lengthChange": true, "autoWidth": false,
+            "buttons": ["copy", "excel", "print"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+</script>
+
+<script src="~/scripts/getallversionofsoftware.js"></script>
+<script src="~/scripts/download.js"></script>

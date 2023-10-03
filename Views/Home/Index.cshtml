@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var hoten = HttpContextAccessor.HttpContext.Session.GetString("username");
+    var role = HttpContextAccessor.HttpContext.Session.GetString("userrole");
+}
+@model List<SoftVersionControl.Models.Lichsu>
+@{
+    ViewData["Active"] = "3";
+    string demModel = ViewBag.countModel;
+    string demSoft = ViewBag.countSoft;
+    string demUser = ViewBag.countUser;
+}
+
+<div>
+    <a class="btn btn-app " id="btnCreateNewModel">
+        <span class="badge bg-danger">@demModel</span>
+        <i class="fas fa-plus"></i> Model
+    </a>
+    <a class="btn btn-app" id="btnCreateNewSoftName">
+        <span class="badge bg-danger">@demSoft </span>
+        <i class="fas fa-plus"></i> Phần mềm
+    </a>
+    <a class="btn btn-app" id="btnUpload">
+        <i class="fas fa-upload"></i> Upload
+    </a>
+    <a class="btn btn-app " id="btnQuanlytaikhoan">
+        <span class="badge bg-danger">@demUser</span>
+        <i class="fas fa-users"></i> Tài khoản
+    </a>
+    <a class="btn btn-app" id="btnMatkhau">
+        <i class="fas fa-lock"></i> Mật khẩu
+    </a>
+</div>
+
+
+<div class="row" style="margin-top:10px">
+    <div id="modelList" class="col-lg-7">
+        <div class="d-flex justify-content-center" style="margin-top:100px">
+            <div class="spinner-border text-primary" style="width: 5rem; height: 5rem;" role="status">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card ">
+            <div class="card-header" style="background:#F5F5F5">
+                <h3 class="card-title">
+                    <i class="fa fa-history fa-fw" aria-hidden="true"></i>
+                    Hoạt động gần đây
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <ul class="products-list product-list-in-card pl-2 pr-2" style="font-size:small">
+                    @foreach (var item in Model)
+                    {
+                        <li class="item">
+                            <div class="product-img">
+                                <img class="img-circle img-bordered-sm" src="~/user.png" alt="user image">
+                            </div>
+                            <div class="product-info">
+                                <a asp-action="lichsu" asp-controller="lichsu" class="product-title">
+                                    @item.Ten
+                                    @{
+                                        switch (item.Type)
+                                        {
+                                            case "Login":
+                                                <span class="badge badge-info float-right">@item.Type</span>
+                                                break;
+                                            case "Create":
+                                                <span class="badge badge-success float-right">@item.Type</span>
+                                                break;
+                                            case "Delete":
+                                                <span class="badge badge-danger float-right">@item.Type</span>
+                                                break;
+                                            case "Edit":
+                                                <span class="badge badge-warning float-right">@item.Type</span>
+                                                break;
+                                            case "Upload":
+                                                <span class="badge bg-purple float-right">@item.Type</span>
+                                                break;
+                                            case "Download":
+                                                <span class="badge bg-purple float-right">@item.Type</span>
+                                                break;
+                                        }
+                                    }
+                                </a>
+                                <span class="product-description">
+                                    @item.Thoigian
+                                    <br>
+                                    @item.Hanhdong
+                                </span>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-action="lichsu" asp-controller="lichsu" class="uppercase">Xem tất cả</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDanhsachphanmem" style="padding-right:0px">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div id="modelInfo_Danhsachphanmem">
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync fa-spin"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalThemphanmemmoi" data-idmodel="" data-idphanmem="">
+    <partial name="_ModalUploadSoft" />
+</div>
+
+<script src="~/scripts/createnewmodel.js"></script>
+<script src="~/scripts/createnewsoftname.js"></script>
+<script src="~/scripts/GetListModel.js"></script>
+<script src="~/scripts/SelectModelAndSoftName.js"></script>

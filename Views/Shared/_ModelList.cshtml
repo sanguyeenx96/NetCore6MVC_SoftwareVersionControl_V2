@@ -1,0 +1,129 @@
+﻿@model List<SoftVersionControl.Models.Model>
+<style>
+    .table td, .table th {
+        padding: 0.75rem;
+        vertical-align: middle;
+        border-top: 1px solid #dee2e6;
+    }
+</style>
+<div class="card ">
+    <div class="card-header" style="background:#F5F5F5">
+        <h3 class="card-title">
+            <i class="fa fa-th fa-fw" aria-hidden="true"></i>
+            Danh sách dữ liệu
+        </h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover">
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    if (item.ChildrenModel.Count == 0)
+                    {
+                        <tr data-item-id="@item.Id">
+                            <td style="font-weight: 600;" class="border-0">
+                                <i style="color:red" class="fa fa-question-circle" aria-hidden="true"></i>
+                                Model @item.Name
+                            </td>
+                            <td class="border-0" style="text-align:end">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-default dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cog fa-fw"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item edit" href="#"><i class="fas fa-pen fa-fw"> </i> Chỉnh sửa</a>
+                                        <a class="dropdown-item delete" href="#"><i class="fas fa-trash fa-fw"> </i> Xoá</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    if (item.ChildrenModel.Count > 0)
+                    {
+                        <tr data-widget="expandable-table" aria-expanded="false" data-item-id="@item.Id">
+                            <td style="font-weight: 600;">
+                                <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                                <i style="color:orange" class="fas fa-folder-open fa-fw"></i>
+                                Model @item.Name
+                            </td>
+                            <td class="border-0" style="text-align:end">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-default dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cog fa-fw"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:smaller">
+                                        @*                                        <a class="dropdown-item edit" href="#"><i class="fas fa-pen fa-fw"> </i> Chỉnh sửa</a>
+                                *@                                                                    
+                                <a class="dropdown-item delete" href="#"><i style="color:red" class="fas fa-trash fa-fw"> </i> Xoá Model</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="expandable-body d-none">
+                            <td class="w-100">
+                                <div class="p-0" style="display: none;">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            @foreach (var chilModel in item.ChildrenModel)
+                                            {
+                                                <tr data-item-id="@chilModel.Id">
+                                                    <td style="font-weight: 500;" class="border-0">
+                                                        <i  class="fa fa-caret-right fa-fw"></i>
+                                                        @chilModel.Name
+                                                    </td>
+                                                    <td class="border-0" style="text-align:end">
+                                                        <div class="btn-group ">
+                                                            <button class="btn btn-sm btn-default xemDanhSachPhanMem" type="button" data-model-name="@chilModel.Name">
+                                                                <i style="color:orange" class="fa fa-folder-open fa-fw" aria-hidden="true"></i>
+                                                                Danh sách phần mềm
+                                                            </button>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <i class="fas fa-cog fa-fw"> </i>
+                                                                </button>
+                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:smaller">
+                                                                    @*                                                                    <a class="dropdown-item edit" href="#"><i class="fas fa-pen fa-fw"> </i> Chỉnh sửa</a>
+                                                        *@                                                                    
+                                                        <a class="dropdown-item delete" href="#"><i style="color:red" class="fas fa-trash fa-fw"> </i> Xoá Model</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+
+<div class="modal fade" id="modalDanhsachphanmem" style="padding-right:0px">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div id="modelInfo_Danhsachphanmem">
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync fa-spin"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/scripts/GetListSoftware.js"></script>
+<script src="~/scripts/deletemodel.js"></script>
