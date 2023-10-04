@@ -63,7 +63,7 @@
                                             if (!data.success) {
                                                 console.log(
                                                     "Lỗi xảy ra: " +
-                                                    data.message
+                                                        data.message
                                                 );
                                                 Swal.fire({
                                                     icon: "error",
@@ -74,8 +74,8 @@
                                                 Swal.fire(
                                                     "Thành công",
                                                     "Bạn vừa thêm Model " +
-                                                    modelName +
-                                                    " thành công",
+                                                        modelName +
+                                                        " thành công",
                                                     "success"
                                                 ).then(function () {
                                                     window.location.reload();

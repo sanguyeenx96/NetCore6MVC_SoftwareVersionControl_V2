@@ -133,9 +133,10 @@ namespace SoftVersionControl.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSelectListVersion(int id)
         {
-            List<Software> version = await _context.Softwares.Where(x => x.SoftNameId == id).OrderByDescending(s => s.Version).ToListAsync();
+            List<Software> version = await _context.Softwares.Where(x => x.SoftNameId == id).ToListAsync();
             return Json(version);
         }
 
+        
     }
 }

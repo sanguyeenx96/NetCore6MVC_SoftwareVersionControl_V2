@@ -28,7 +28,7 @@
 </style>
 <div class="modal-header" style="background:#F5F5F5">
     <h4 class="modal-title" style="font-size:medium">
-        <i style="color:orange" class="fa fa-folder-open fa-fw" aria-hidden="true"></i>
+        <i style="color:#17A2B8" class="fa fa-th fa-fw" aria-hidden="true"></i>
         <span class="modal-title-content">???</span>
     </h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -45,7 +45,7 @@
                 <th class="col-2">
                     Version mới nhất
                 </th>
-                <th class="col-3">
+                <th class="col-4">
                     Chức năng
                 </th>
             </tr>
@@ -64,7 +64,7 @@
                         }
                         else
                         {
-                            <span style="font-size:smaller" class="badge bg-gradient-danger">Không có dữ liệu</span>
+                            <span style="font-size:smaller" class="badge bg-warning">Chưa có dữ liệu</span>
                         }
                     </td>
                     <td>
@@ -74,16 +74,17 @@
                                 data-id="@item.Id">
                                 <i style="color:#17A2B8" class="fa fa-info fa-fw "></i> Chi tiết
                             </button>
+                            <button class="btn btn-xs btn-default btnDownload" href="#"
+                           data-name="@item.Name"
+                           data-id="@item.Id"
+                           data-path="@((item.Softwares.OrderByDescending(s => s.Version).FirstOrDefault()?.Path ?? "").ToString())">
+                                <i style="color:green" class="fas fa-download fa-fw"> </i> Tải phần mềm
+                            </button>
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-cog fa-fw"> </i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item btnDownload" href="#"
-                                   data-name="@item.Name"
-                                   data-id="@item.Id">
-                                        <i style="color:green" class="fas fa-download fa-fw"> </i> Tải phần mềm
-                                    </a>
                                     <a class="dropdown-item btnEdit" href="#" data-id="@item.Id">
                                         <i style="color:orange" class="fas fa-pen fa-fw"></i> Sửa thông tin
                                     </a>
@@ -107,7 +108,7 @@
             language: {
                 processing: "Đang tải dữ liệu...",
                 search: "Tìm kiếm",
-                lengthMenu: "Điều chỉnh số lượng bản ghi trên 1 trang _MENU_ ",
+                lengthMenu: "Số lượng bản ghi trên 1 trang _MENU_ ",
                 info: "Bản ghi từ _START_ đến _END_ - Tổng số _TOTAL_ bản ghi",
                 infoEmpty: "Không có dữ liệu",
                 infoFiltered: "(Trong tổng số _MAX_ bản ghi)",

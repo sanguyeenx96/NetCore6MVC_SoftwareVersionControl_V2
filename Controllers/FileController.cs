@@ -125,6 +125,16 @@ namespace SoftVersionControl.Controllers
             try
             {
                 int softNameId = Convert.ToInt32(formData.SoftNameId);
+                var softs = _context.Softwares.Where(x => x.SoftNameId == softNameId).ToList();
+                if (softs.Any())
+                {
+                    foreach (var soft in softs)
+                    {
+                        soft.TrangThaiApDung = false;
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
                 //ISession session = HttpContext.Session;
                 var newSoft = new Software();
                 newSoft.Version = formData.Version;
@@ -151,7 +161,6 @@ namespace SoftVersionControl.Controllers
                 string tenphanmem = _context.SoftNames.Where(x => x.Id == softNameId).FirstOrDefault().Name.ToString();
                 await LuuLichSu("Create", "Cập nhật phiên bản mới phần mềm: " + tenphanmem + " , Đường dẫn: " + formData.Path);
                 return Json(new { success = true });
-
             }
             catch (Exception ex)
             {

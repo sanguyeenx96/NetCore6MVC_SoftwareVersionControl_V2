@@ -1,7 +1,10 @@
 ﻿$(".btnXemchitiet").click(function () {
     var id = $(this).data("id");
     var name = $(this).data("name");
-
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        return new Date(dateString).toLocaleDateString('vi-VN', options);
+    }
     $.ajax({
         type: "GET",
         url: "/Soft/GetListAllVersionOfSoftware",
@@ -29,8 +32,8 @@
                     "</td>";
                 tableHtml += "<td  class='col-7'>" + item.diemThayDoi + "</td>";
 
-                tableHtml += "<td>" + item.ngayApDung + "</td>";
-                tableHtml += "<td>" + item.ngayCaiDat + "</td>";
+                tableHtml += "<td>" + formatDate(item.ngayApDung) + "</td>";
+                tableHtml += "<td>" + formatDate(item.ngayCaiDat) + "</td>";
                 tableHtml += "<td>" + item.soLuongJigCaiDat + "</td>";
                 tableHtml += "<td>" + item.softName + "</td>";
                 tableHtml += "<td>" + item.fileName + "</td>";

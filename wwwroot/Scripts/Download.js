@@ -1,4 +1,4 @@
-﻿function downloadFile(filePath) {
+function downloadFile(filePath) {
     $.ajax({
         type: "GET",
         url: "/File/DownloadFile?filename=" + encodeURIComponent(filePath),
@@ -29,7 +29,7 @@ $(".btnDownload").on("click", function (e) {
     e.stopPropagation();
     var id = $(this).data("id");
     var name = $(this).data("name");
-
+    var path = $(this).data("path");
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: "btn btn-success",
@@ -40,7 +40,7 @@ $(".btnDownload").on("click", function (e) {
     swalWithBootstrapButtons
         .fire({
             title: name,
-            icon: "info",
+            icon: "question",
             showCancelButton: true,
             confirmButtonText:
                 '<i class="fa fa-download fa-fw"></i> Tải Version mới nhất',
@@ -51,11 +51,51 @@ $(".btnDownload").on("click", function (e) {
             if (result.isConfirmed) {
                 downloadFile(path);
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                swalWithBootstrapButtons.fire(
-                    "Đã huỷ",
-                    "Thao tác đã được huỷ bỏ!",
-                    "error"
-                );
+                $.ajax({
+                    url: "/Soft/GetSelectListVersion",
+                    method: "GET",
+                    data: { id: id },
+                    success: function (data) {
+                        console.log(data);
+                        const vers = data;
+                        const inputOptions = {};
+                        vers.forEach((ver) => {
+                            inputOptions[ver.path] = ver.version;
+                        });
+                        swalWithBootstrapButtons
+                            .fire({
+                                title: "Chọn Version",
+                                input: "select",
+                                inputOptions: inputOptions,
+                                showCancelButton: true,
+                                confirmButtonText:
+                                    '<i class="fa fa-download fa-fw"></i> Tải về',
+                                cancelButtonText: "Huỷ bỏ",
+                                reverseButtons: true,
+                            })
+                            .then((result) => {
+                                if (result.isConfirmed) {
+                                    var path  = result.value;
+                                    downloadFile(path);
+                                } else if (
+                                    result.dismiss === Swal.DismissReason.cancel
+                                ) {
+                                    swalWithBootstrapButtons.fire(
+                                        "Đã huỷ",
+                                        "Thao tác đã được huỷ bỏ!",
+                                        "error"
+                                    );
+                                }
+                            });
+                    },
+                    error: function () {
+                        Swal.fire(
+                            "Lỗi máy chủ",
+                            "Không tải được dữ liệu",
+                            "error"
+                        );
+                    },
+                });
             }
         });
 });
