@@ -135,7 +135,7 @@ namespace SoftVersionControl.Controllers
                     }
                 }
 
-                //ISession session = HttpContext.Session;
+                ISession session = HttpContext.Session;
                 var newSoft = new Software();
                 newSoft.Version = formData.Version;
                 newSoft.DiemThayDoi = formData.DiemThayDoi;
@@ -147,7 +147,7 @@ namespace SoftVersionControl.Controllers
                 {
                     newSoft.NgayCaiDat = resultNgayCaiDat;
                 }
-                newSoft.NguoiCaiDat = "Sang Nguyen"; //phai lay tu session
+                newSoft.NguoiCaiDat = session.GetString("username").ToString();
                 newSoft.NguoiXacNhan = formData.NguoiXacNhan;
                 newSoft.SoLuongJigCaiDat = Convert.ToInt32(formData.SoLuongJigCaiDat);
                 newSoft.TrangThaiApDung = true;

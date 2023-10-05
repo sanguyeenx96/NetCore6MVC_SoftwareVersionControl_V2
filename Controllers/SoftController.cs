@@ -51,7 +51,7 @@ namespace SoftVersionControl.Controllers
             await _context.SaveChangesAsync();
 
             string tenmodel = _context.Models.Where(x => x.Id == modelId).FirstOrDefault().Name.ToString();
-            await LuuLichSu("Create", "Tạo phần mềm mới: " + name.ToUpper() +" thuộc Model: " + tenmodel );
+            await LuuLichSu("Create", "Tạo phần mềm mới: " + name.ToUpper() + " thuộc Model: " + tenmodel);
             return Json(new { success = true });
         }
 
@@ -116,7 +116,7 @@ namespace SoftVersionControl.Controllers
             {
                 List<Version> vers = new List<Version>();
                 var listver = await _context.Softwares.Where(x => x.SoftNameId == id).ToListAsync();
-                foreach(var item in listver)
+                foreach (var item in listver)
                 {
                     string ver = item.Version;
                     vers.Add(Version.Parse(ver));
@@ -129,7 +129,7 @@ namespace SoftVersionControl.Controllers
             }
         }
 
-        
+
         [HttpGet]
         public async Task<IActionResult> GetSelectListVersion(int id)
         {
@@ -137,6 +137,25 @@ namespace SoftVersionControl.Controllers
             return Json(version);
         }
 
-        
+        [HttpPost]
+        public async Task<IActionResult> EditSoftName(int id, string name)
+        {
+            var soft = await _context.SoftNames.Where(x => x.Id == id).Include(x=>x.Model).FirstOrDefaultAsync();
+            string tenmodel = soft.Model.Name.ToString();
+            if (soft != null)
+            {
+                soft.Name = name;
+                await _context.SaveChangesAsync();
+                await LuuLichSu("Edit", "Sửa tên phần mềm " + name.ToUpper() + " thuộc Model: " + tenmodel);
+
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false});
+
+            }
+        }
+
     }
 }

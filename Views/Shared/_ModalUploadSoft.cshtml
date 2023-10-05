@@ -1,4 +1,11 @@
-﻿<style>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var hoten = HttpContextAccessor.HttpContext.Session.GetString("username");
+    var role = HttpContextAccessor.HttpContext.Session.GetString("userrole");
+}
+
+<style>
     .bootstrap-datetimepicker-widget.dropdown-menu {
         z-index: 99;
         width: auto;
@@ -127,7 +134,7 @@
                                 </div>
                                 <div class="form-group col-4">
                                     <label style="font-size:smaller">Người cài đặt</label>
-                                    <input name="NguoiCaiDat" type="text" class="form-control">
+                                    <input name="NguoiCaiDat" type="text" class="form-control" value="@hoten" readonly="readonly">
                                 </div>
                                 <div class="form-group col-4">
                                     <label style="font-size:smaller">Số lượng Jig cài đặt</label>
@@ -135,7 +142,8 @@
                                 </div>
                                 <div class="form-group col-4">
                                     <label style="font-size:smaller">Người xác nhận</label>
-                                    <input name="NguoiXacNhan" type="text" class="form-control">
+                                    <select class="form-control" id="nguoixacnhanSelect" name="NguoiXacNhan">
+                                    </select>
                                 </div>
                                 <div class="col-6">
                                     <input value="Huỷ bỏ" class="btn btn-danger btn-block" />
@@ -153,4 +161,28 @@
     </div>
 </div>
 
-
+<script>
+    $.ajax({
+        url: "/User/GetSelectListNguoiXacNhan",
+        method: "GET",
+        success: function (data) {
+            console.log(data)
+            var selectList = $("#nguoixacnhanSelect");
+            // Xóa tất cả các option hiện có (nếu có)
+            selectList.empty();           
+            // Thêm option cho từng phần tử trong dữ liệu
+            $.each(data, function (index, item) {
+                selectList.append($("<option></option>")
+                    .attr("value", item.hoten) // Thay item.id bằng thuộc tính chứa giá trị bạn muốn đặt làm giá trị của option
+                    .text(item.hoten)); // Thay item.name bằng thuộc tính chứa nội dung bạn muốn hiển thị
+            });
+        },
+        error: function (xhr, status, error) {
+            Swal.fire(
+                "Không tải được dữ liệu người xác nhận",
+                "Lỗi kết nối",
+                "error"
+            );
+        },
+    });
+</script>

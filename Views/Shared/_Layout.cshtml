@@ -92,12 +92,15 @@
                                 Tìm kiếm
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a id="3" asp-action="index" asp-controller="home" class="nav-link">
-                                <i class="fa fa-th fa-fw"></i>
-                                Dữ liệu
-                            </a>
-                        </li>
+                        @if (role == "admin"){
+                            <li class="nav-item">
+                                <a id="3" asp-action="settings" asp-controller="home" class="nav-link">
+                                    <i class="fa fa-th fa-fw"></i>
+                                    Dữ liệu
+                                </a>
+                            </li>
+                        }
+                
                         <li class="nav-item">
                             <a id="2" asp-action="lichsu" asp-controller="history" class="nav-link">
                                 <i class="fa fa-history fa-fw"></i>
@@ -119,7 +122,7 @@
                                     Tài khoản người dùng
                                 </span>
                                 <div class="dropdown-divider"></div>
-                                <a asp-action="login" class="dropdown-item" style="text-align:center">
+                                <a asp-action="login" asp-controller="home"  class="dropdown-item" style="text-align:center">
                                     <i class="fa fa-power-off" aria-hidden="true"></i>
                                     Đăng xuất
                                 </a>
@@ -136,7 +139,7 @@
                                     Tài khoản quản trị
                                 </span>
                                 <div class="dropdown-divider"></div>
-                                <a asp-action="login" class="dropdown-item" style="text-align:center">
+                                <a asp-action="login" asp-controller="home" class="dropdown-item" style="text-align:center">
                                     <i class="fa fa-power-off" aria-hidden="true"></i>
                                     Đăng xuất
                                 </a>

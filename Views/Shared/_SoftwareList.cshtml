@@ -6,22 +6,16 @@
         vertical-align: middle;
         text-align: center;
     }
-
     #modalSuathongtinphanmem .modal-dialog {
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
     }
-
     .table td, .table th {
         padding: 0.5rem;
     }
-
-    table.dataTable > tbody > tr.child ul.dtr-details {
-        text-align: left;
-    }
-
+    
     div:where(.swal2-container) .swal2-html-container {
         overflow: hidden;
     }
@@ -36,7 +30,7 @@
     </button>
 </div>
 <div class="modal-body">
-    <table id="table" class="table table-hover table-responsive-lg" style="font-size:smaller">
+    <table id="table" class="table table-borderless table-hover table-responsive-lg" style="font-size:smaller">
         <thead>
             <tr style="font-size:smaller; text-align:center">
                 <th>
@@ -85,7 +79,7 @@
                                     <i class="fas fa-cog fa-fw"> </i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item btnEdit" href="#" data-id="@item.Id">
+                                    <a class="dropdown-item btnEdit" href="#" data-id="@item.Id" data-name="@item.Name">
                                         <i style="color:orange" class="fas fa-pen fa-fw"></i> Sửa thông tin
                                     </a>
                                     <a class="dropdown-item btnDelete" href="#" data-id="@item.Id">
@@ -99,6 +93,29 @@
             }
         </tbody>
     </table>
+</div>
+
+<div class="modal fade " id="modalSuathongtinphanmem">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header " style="background:#F5F5F5">
+                <h4 class="modal-title">
+                    <i class="fas fa-pen fa-fw"> </i>
+                    Sửa thông tin phần mềm
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modelContent_Suathongtinphanmem">
+                    <div class="overlay">
+                        <i class="fas fa-2x fa-sync fa-spin"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -134,3 +151,4 @@
 
 <script src="~/scripts/getallversionofsoftware.js"></script>
 <script src="~/scripts/download.js"></script>
+<script src="~/scripts/editsoftinfo.js"></script>

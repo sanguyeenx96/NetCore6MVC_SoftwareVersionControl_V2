@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="card-body">
-        <table id="banglichsu" class="table table-bordered table-hover table-responsive-md">
+        <table id="banglichsu" class="table table-borderless table-hover table-responsive-md">
             <thead>
                 <tr style="font-size:small;text-align:center">
                     <th class="col-sm-3">
@@ -82,7 +82,7 @@
                             @Html.DisplayFor(modelItem => item.Hanhdong)
                         </td>
                         <td style=" vertical-align:middle;text-align:center">
-                            @Html.DisplayFor(modelItem => item.Thoigian)
+                            @item.Thoigian.ToString("yyyy/MM/dd HH:mm")
                         </td>
 
                     </tr>

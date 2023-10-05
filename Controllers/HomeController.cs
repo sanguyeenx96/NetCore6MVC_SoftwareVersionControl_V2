@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SoftVersionControl.Models;
 using System.Diagnostics;
@@ -45,10 +47,21 @@ namespace SoftVersionControl.Controllers
                     ISession session = HttpContext.Session;
                     session.SetString("username", checklogin.Hoten);
                     session.SetString("userrole", checklogin.Role);
+                    session.SetInt32("userid", checklogin.Id);
+                    session.SetString("userpwd", checklogin.Pwd);
 
                     var hoten = session.GetString("username");
                     await LuuLichSu("Login", "Đăng nhập hệ thống");
-                    return RedirectToAction("index");
+                    if(checklogin.Role == "admin")
+                    {
+                        return RedirectToAction("index");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "search");
+
+                    }
+
                 }
             }
             return View();

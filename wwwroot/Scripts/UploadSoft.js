@@ -1,4 +1,4 @@
-﻿var nameFile = "";
+var nameFile = "";
 var ModelId = "";
 var SoftId = "";
 
@@ -207,7 +207,7 @@ $(document).ready(function () {
         var txtNgayApDung = $("input[name='NgayApDung']").val();
         var txtNgayCaiDat = $("input[name='NgayCaiDat']").val();
         var txtSoLuongJigCaiDat = $("input[name='SoLuongJigCaiDat']").val();
-        var txtNguoiXacNhan = $("input[name='NguoiXacNhan']").val();
+        var txtNguoiXacNhan = $("#nguoixacnhanSelect").val();
         var fileName = txtVersion + "_" + nameFile;
         var filePath =
             "uploads" +
