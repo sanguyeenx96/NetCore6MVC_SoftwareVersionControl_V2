@@ -1,0 +1,409 @@
+﻿@model IEnumerable<SoftVersionControl.Models.Password>
+<style>
+ 
+    .table td, .table th {
+        padding: 0.5rem;
+    }
+
+</style>
+<div class="col-12">
+    <p>
+        <btn class="btn btn-outline-success btnThemtaikhoanmoi" asp-action="Create">
+            <i class="fa fa-plus fa-fw"></i>
+            Thêm tài khoản mới
+        </btn>
+    </p>
+    <table id="tableDulieu" class="table table-borderless table-hover table-responsive-lg">
+        <thead>
+            <tr style="font-size:small;text-align:center">
+                <th>
+                    Họ và tên
+                </th>
+                <th>
+                    Tên đăng nhập
+                </th>
+                <th>
+                    Mật khẩu
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Role)
+                </th>
+                <th>
+                    Chức năng
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+                if (item.Type == "login")
+                {
+                    {
+                        <tr style="font-size:small;text-align:center">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Hoten)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Username)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Pwd)
+                            </td>
+                            <td>
+                                @{
+                                    if (@item.Role == "user")
+                                    {
+                                                    <span style="font-size:smaller" class="badge bg-primary">User</span>
+                                    }
+                                    if (@item.Role == "admin")
+                                    {
+                                                    <span style="font-size:smaller" class="badge bg-warning">Admin</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cog fa-fw"> </i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a href="#" class="dropdown-item btnPhanquyen"
+                                               data-id="@item.Id"
+                                               data-hoten="@item.Hoten"
+                                               data-usn="@item.Username"
+                                               data-pwd="@item.Pwd">
+                                            <i style="color:blue" class="fa fa-user fa-fw"></i> Phân quyền
+                                        </a>
+                                        <a  href="#" class="dropdown-item btnSuataikhoan"
+                                               data-id="@item.Id"
+                                               data-hoten="@item.Hoten"
+                                               data-usn="@item.Username"
+                                               data-pwd="@item.Pwd">
+                                            <i style="color:orange" class="fa fa-pen fa-fw"></i> Sửa thông tin
+                                        </a>
+                                        <a href="#" class="dropdown-item btnXoataikhoan" data-id="@item.Id">
+                                            <i style="color:red" class="fa fa-trash fa-fw"></i> Xoá tài khoản
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#tableDulieu').DataTable({
+            "pageLength": 7,
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+        $(".btnThemtaikhoanmoi").click(function () {
+            Swal.fire({
+                title: 'Thêm tài khoản mới',
+                html:
+                    `<input type="text" id="hoten" class="swal2-input" placeholder="Họ và tên">
+                                                        <input type="text" id="usn" class="swal2-input" placeholder="Tên đăng nhập">
+                                                            <input type="password" id="pwd" class="swal2-input" placeholder="Mật khẩu">`,
+                confirmButtonText: 'Xác nhận',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const hoten = Swal.getPopup().querySelector('#hoten').value
+                    const username = Swal.getPopup().querySelector('#usn').value
+                    const password = Swal.getPopup().querySelector('#pwd').value
+                    if (!username || !password || !hoten) {
+                        Swal.showValidationMessage(`Phải nhập đầy đủ thông tin`)
+                    }
+                    return { hoten: hoten, username: username, password: password }
+                }
+            }).then((result) => {
+                var usn = result.value.username.trim()
+                var pwd = result.value.password.trim()
+                var hoten = result.value.hoten.trim();
+                $.ajax({
+                    url: "/User/ThemTaiKhoanMoi",
+                    type: "POST",
+                    data: {
+                        usn: usn,
+                        pwd: pwd,
+                        hoten: hoten
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire(
+                                'Thành công!',
+                                'Bạn vừa tạo tài khoản mới thành công',
+                                'success'
+                            )
+                            $.ajax({
+                                url: "/User/GetDanhsachtaikhoan",
+                                type: "GET",
+                                success: function (data) {
+                                    $("#modalContent_Quanlytaikhoan").html(data);
+                                },
+                                error: function (xhr, t, error) {
+                                    swalWithBootstrapButtons.fire(
+                                        'Không lấy được dữ liệu',
+                                        'Trang sẽ tự động tải lại',
+                                        'error'
+                                    ).then(function () {
+                                        window.location.reload();
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            Swal.fire(
+                                'Thất bại!',
+                                'Tên đăng nhập bị trùng',
+                                'error'
+                            )
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire(
+                            'Thất bại!',
+                            'Lỗi kết nối',
+                            'error'
+                        )
+                    }
+                });
+            })
+        })
+
+        $(".btnXoataikhoan").click(function () {
+            var idStr = $(this).data('id');
+            var id = parseInt(idStr);
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: true
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Xoá tài khoản ?',
+                text: 'Dữ liệu tài khoản sẽ bị xoá vĩnh viễn',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xác nhận xoá',
+                cancelButtonText: 'Huỷ bỏ',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/User/XoaTaiKhoan",
+                        type: 'DELETE',
+                        data: { id: id },
+                        success: function (data) {
+                            if (!data.success) {
+                                Swal.fire(
+                                    'Thất bại!',
+                                    'Lỗi kết nối',
+                                    'error'
+                                )
+                            }
+                            else {
+                                Swal.fire(
+                                    'Thành công!',
+                                    'Bạn vừa xoá tài khoản thành công',
+                                    'success'
+                                )
+                                $.ajax({
+                                    url: "/User/GetDanhsachtaikhoan",
+                                    type: "GET",
+                                    success: function (data) {
+                                        $("#modalContent_Quanlytaikhoan").html(data);
+                                    },
+                                    error: function (xhr, t, error) {
+                                        swalWithBootstrapButtons.fire(
+                                            'Không lấy được dữ liệu',
+                                            'Trang sẽ tự động tải lại',
+                                            'error'
+                                        ).then(function () {
+                                            window.location.reload();
+                                        });
+                                    }
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: error,
+                            })
+                        }
+                    });
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Đã huỷ',
+                        'Thao tác đã được huỷ bỏ!',
+                        'error'
+                    )
+                }
+            })
+        })
+
+        $(".btnSuataikhoan").click(function () {
+            var usn = $(this).data('usn');
+            var hoten = $(this).data('hoten');
+            var pwd = $(this).data('pwd');
+            var idStr = $(this).data('id');
+            var id = parseInt(idStr);
+
+            Swal.fire({
+                title: 'Sửa thông tin tài khoản',
+                html:
+                    `
+                            <input type="text" id="hoten" class="swal2-input" value="${hoten}" autocomplete="off" >
+                            <input type="text" id="usn" class="swal2-input" value="${usn}" autocomplete="off" >
+                            <input type="password" id="pwd" class="swal2-input" value="${pwd}" autocomplete="off" >
+                         `,
+                confirmButtonText: 'Xác nhận',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const hoten = Swal.getPopup().querySelector('#hoten').value
+                    const username = Swal.getPopup().querySelector('#usn').value
+                    const password = Swal.getPopup().querySelector('#pwd').value
+                    if (!username || !password || !hoten) {
+                        Swal.showValidationMessage(`Phải nhập đầy đủ thông tin`)
+                    }
+                    return { hoten: hoten, username: username, password: password }
+                }
+            }).then((result) => {
+                var hoten = result.value.hoten.trim();
+                var usn = result.value.username.trim()
+                var pwd = result.value.password.trim()
+                $.ajax({
+                    url: "/User/Sua",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        hoten: hoten,
+                        usn: usn,
+                        pwd: pwd
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire(
+                                'Thành công!',
+                                'Bạn vừa sửa tài khoản thành công',
+                                'success'
+                            )
+                            $.ajax({
+                                url: "/User/GetDanhsachtaikhoan",
+                                type: "GET",
+                                success: function (data) {
+                                    $("#modalContent_Quanlytaikhoan").html(data);
+                                },
+                                error: function (xhr, t, error) {
+                                    swalWithBootstrapButtons.fire(
+                                        'Không lấy được dữ liệu',
+                                        'Trang sẽ tự động tải lại',
+                                        'error'
+                                    ).then(function () {
+                                        window.location.reload();
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            Swal.fire(
+                                'Thất bại!',
+                                'Tên đăng nhập bị trùng',
+                                'error'
+                            )
+                        }
+                    },
+                    error: function (xhr, t, error) {
+                        Swal.fire(
+                            'Thất bại!',
+                            'Lỗi kết nối',
+                            'error'
+                        )
+                    }
+                });
+            })
+        })
+        $(".btnPhanquyen").click(async function () {
+            var usn = $(this).data('usn');
+            var hoten = $(this).data('hoten');
+            var pwd = $(this).data('pwd');
+            var idStr = $(this).data('id');
+            var id = parseInt(idStr);
+
+            const inputOptions = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        'user': 'User',
+                        'admin': 'Admin'
+                    })
+                }, 1000)
+            })
+
+            const { value: role } = await Swal.fire({
+                title: 'Phân quyền cho tài khoản',
+                input: 'radio',
+                inputOptions: inputOptions,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Bạn phải chọn phân quyền!'
+                    }
+                }
+            })
+
+            if (role) {
+                $.ajax({
+                    url: "/User/Phanquyen",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        role: role
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire(
+                                'Thành công!',
+                                'Bạn vừa phân quyền tài khoản thành công',
+                                'success'
+                            )
+                            $.ajax({
+                                url: "/User/GetDanhsachtaikhoan",
+                                type: "GET",
+                                success: function (data) {
+                                    $("#modalContent_Quanlytaikhoan").html(data);
+                                },
+                                error: function (xhr, t, error) {
+                                    swalWithBootstrapButtons.fire(
+                                        'Không lấy được dữ liệu',
+                                        'Trang sẽ tự động tải lại',
+                                        'error'
+                                    ).then(function () {
+                                        window.location.reload();
+                                    });
+                                }
+                            });
+                        }
+                    }
+
+                })
+
+
+            }
+        })
+
+
+
+    });
+</script>

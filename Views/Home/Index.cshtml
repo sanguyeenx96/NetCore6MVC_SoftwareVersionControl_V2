@@ -3,6 +3,11 @@
 @{
     var hoten = HttpContextAccessor.HttpContext.Session.GetString("username");
     var role = HttpContextAccessor.HttpContext.Session.GetString("userrole");
+
+    var userid = HttpContextAccessor.HttpContext.Session.GetInt32("userid");
+    var userpwd = HttpContextAccessor.HttpContext.Session.GetString("userpwd");
+
+
 }
 @model List<SoftVersionControl.Models.Lichsu>
 @{
@@ -13,7 +18,7 @@
 }
 
 <div>
-    <a class="btn btn-app " id="btnCreateNewModel">
+    <a class="btn btn-app " id="btnCreateNewModel" style="margin-left:0px">
         <span class="badge bg-danger">@demModel</span>
         <i class="fas fa-plus"></i> Model
     </a>
@@ -28,7 +33,7 @@
         <span class="badge bg-danger">@demUser</span>
         <i class="fas fa-users"></i> Tài khoản
     </a>
-    <a class="btn btn-app" id="btnMatkhau">
+    <a class="btn btn-app" id="btnMatkhau" data-id=@userid data-pwd=@userpwd>
         <i class="fas fa-lock"></i> Mật khẩu
     </a>
 </div>
@@ -111,6 +116,7 @@
     </div>
 </div>
 
+@*Modal Danh sách phần mềm*@
 <div class="modal fade" id="modalDanhsachphanmem" style="padding-right:0px">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
@@ -123,11 +129,36 @@
     </div>
 </div>
 
+@*Modal Thêm phần mềm mới*@
 <div class="modal fade" id="modalThemphanmemmoi" data-idmodel="" data-idphanmem="">
     <partial name="_ModalUploadSoft" />
+</div>
+
+@*Modal Quản lý tài khoản*@
+<div class="modal fade" id="modal-quanlytaikhoan">
+    <div class="modal-dialog  modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="font-size:medium">
+                    <i style="color:green" class="fas fa-users fa-fw"> </i>
+                    Quản lý tài khoản
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent_Quanlytaikhoan">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="~/scripts/createnewmodel.js"></script>
 <script src="~/scripts/createnewsoftname.js"></script>
 <script src="~/scripts/GetListModel.js"></script>
 <script src="~/scripts/SelectModelAndSoftName.js"></script>
+
+<script src="~/scripts/user/getlistuser.js"></script>
+<script src="~/scripts/editpassword.js"></script>
