@@ -145,11 +145,9 @@
                                     <select class="form-control" id="nguoixacnhanSelect" name="NguoiXacNhan">
                                     </select>
                                 </div>
-                                <div class="col-6">
-                                    <input value="Huỷ bỏ" class="btn btn-danger btn-block" />
-                                </div>
-                                <div class="col-6">
-                                    <input type="submit" value="Xác nhận" class="btn btn-success btn-block" />
+                                <div class="col-12">
+                                    <hr />
+                                    <input type="submit" value="Xác nhận" class="btn btn-outline-success btn-block" />
                                 </div>
                             </div>
                         </div>
@@ -162,6 +160,7 @@
 </div>
 
 <script>
+  
     $.ajax({
         url: "/User/GetSelectListNguoiXacNhan",
         method: "GET",

@@ -67,11 +67,51 @@ namespace SoftVersionControl.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetPwd(string type)
+        {
+            var data = await _context.Passwords.Where(x => x.Type == type).FirstOrDefaultAsync();
+            if (data == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy dữ liệu." });
+            }
+            string pwd = data.Pwd.ToString();
+            return Json(new { success = true, data = pwd });
+        }
+
+
+        public IActionResult OpenFolderInWWWRoot()
+        {
+            try
+            {
+                string wwwRootPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","uploads");
+
+                // Sử dụng Process.Start để mở thư mục trong Windows Explorer
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "explorer.exe",
+                    Arguments = wwwRootPath
+                });
+
+                return Json(new { success = true });
+            }
+            catch
+            {
+                return Json(new { success = false });
+            }
+        }
+
+
+
+
+
+
+
 
         public IActionResult Index()
         {
             ViewBag.parentPage = "Trang chủ";
-            ViewBag.currentPage = "Dữ liệu";
+            ViewBag.currentPage = "Quản lý dữ liệu";
             ViewBag.countModel = _context.Models.Count().ToString();
             ViewBag.countSoft = _context.SoftNames.Count().ToString();
             ViewBag.countUser = _context.Passwords.Count().ToString();

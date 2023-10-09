@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SoftVersionControl.Models;
 using System;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace SoftVersionControl.Controllers
 {
@@ -140,22 +141,140 @@ namespace SoftVersionControl.Controllers
         [HttpPost]
         public async Task<IActionResult> EditSoftName(int id, string name)
         {
-            var soft = await _context.SoftNames.Where(x => x.Id == id).Include(x=>x.Model).FirstOrDefaultAsync();
+            var soft = await _context.SoftNames.Where(x => x.Id == id).Include(x => x.Model).FirstOrDefaultAsync();
             string tenmodel = soft.Model.Name.ToString();
             if (soft != null)
             {
                 soft.Name = name;
                 await _context.SaveChangesAsync();
                 await LuuLichSu("Edit", "Sửa tên phần mềm " + name.ToUpper() + " thuộc Model: " + tenmodel);
-
                 return Json(new { success = true });
             }
             else
             {
-                return Json(new { success = false});
-
+                return Json(new { success = false });
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetSoftToEdit(int softId)
+        {
+            var soft = await _context.Softwares.Where(x => x.SoftNameId == softId).Include(x => x.SoftName).OrderByDescending(s => s.Version).FirstOrDefaultAsync();
+            return PartialView("_ModalEditSoftInfo", soft);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAllVerOfSoft(int softid)
+        {
+            try
+            {
+                var softName = await _context.SoftNames.Where(x => x.Id == softid).Include(x => x.Model).FirstOrDefaultAsync();
+                var soft = await _context.Softwares.Where(x => x.SoftNameId == softid).Include(x => x.SoftName).ToListAsync();
+                if (soft != null)
+                {
+                    foreach (var item in soft)
+                    {
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", item.Path);
+                        FileInfo file = new FileInfo(filePath);
+
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            file.Delete();
+                        }
+                        _context.Softwares.Remove(item);
+                    }
+                    _context.SoftNames.Remove(softName);
+                    await _context.SaveChangesAsync();
+                }
+                await LuuLichSu("Delete", "Xoá tất cả Version phần mềm " + softName.Name.ToUpper() + " thuộc Model: " + softName.Model.Name.ToString());
+                return Json(new { success = true });
+            }
+            catch
+            {
+                return Json(new { success = false });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete1VerOfSoft(int softid, int verSoftId)
+        {
+            try
+            {
+                var softName = await _context.SoftNames.Where(x => x.Id == softid).Include(x => x.Model).FirstOrDefaultAsync();
+                var soft = await _context.Softwares.Where(x => x.SoftNameId == softid).Include(x => x.SoftName).ToListAsync();
+                if (soft != null && soft.Count > 1)
+                {
+                    var verSoft = soft.Where(x => x.Id == verSoftId).FirstOrDefault();
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", verSoft.Path);
+                    FileInfo file = new FileInfo(filePath);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        file.Delete();
+                    }
+                    _context.Softwares.Remove(verSoft);
+                    await _context.SaveChangesAsync();                   
+                    await LuuLichSu("Delete", "Xoá Version " + verSoft.Version.ToString() + " của phần mềm " + softName.Name.ToUpper() + " thuộc Model: " + softName.Model.Name.ToString());
+                    await updateNextVersionAfterDelete(softid, verSoftId);
+                }
+                if (soft != null && soft.Count == 1)
+                {
+                    var verSoft = soft.Where(x => x.Id == verSoftId).FirstOrDefault();
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", verSoft.Path);
+                    FileInfo file = new FileInfo(filePath);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        file.Delete();
+                    }
+                    _context.Softwares.Remove(verSoft);
+                    _context.SoftNames.Remove(softName);
+                    await _context.SaveChangesAsync();
+                    await LuuLichSu("Delete", "Xoá Version " + verSoft.Version.ToString() + " của phần mềm " + softName.Name.ToUpper() + " thuộc Model: " + softName.Model.Name.ToString());
+                }
+                return Json(new { success = true });
+            }
+            catch
+            {
+                return Json(new { success = false });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> updateNextVersionAfterDelete(int softid, int verSoftId)
+        {
+            var softName = await _context.SoftNames.Where(x => x.Id == softid).Include(x => x.Model).FirstOrDefaultAsync();
+            var soft = await _context.Softwares.Where(x => x.SoftNameId == softid).Include(x => x.SoftName).ToListAsync();
+            var lastnextVersion = soft.OrderByDescending(s => s.Version).FirstOrDefault();
+            if (lastnextVersion != null)
+            {
+                lastnextVersion.TrangThaiApDung = true;
+                await LuuLichSu("Edit", "Sửa trạng thái áp dụng version " + lastnextVersion.Version + " phần mềm" + lastnextVersion.SoftName.Name.ToUpper() + " thuộc Model: " + softName.Model.Name.ToString() + " thành Đang áp dụng");
+                await _context.SaveChangesAsync();
+            }
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> checkToChangeNameSoft(int softId)
+        {
+            var check = await _context.Softwares.Where(x => x.SoftNameId == softId).CountAsync();
+            if (check > 0)
+            {
+                return Json(new { success = false, mess = "Đã có dữ liệu" });
+            }
+            return Json(new { success = true, mess = "Có thể đổi tên" });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> changeNameSoft(int softId, string tenMoi)
+        { 
+            var soft = await _context.SoftNames.Where(x => x.Id == softId).FirstOrDefaultAsync();
+            if(soft != null)
+            {
+                soft.Name = tenMoi;
+                await LuuLichSu("Edit", "Sửa tên phần mềm " + tenMoi);
+                await _context.SaveChangesAsync();
+            }
+            return Json(new { success = true });
+        }
     }
 }

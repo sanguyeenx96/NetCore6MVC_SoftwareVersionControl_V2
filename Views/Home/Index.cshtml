@@ -17,27 +17,37 @@
     string demUser = ViewBag.countUser;
 }
 
-<div>
-    <a class="btn btn-app " id="btnCreateNewModel" style="margin-left:0px">
+<div style="text-align:center">
+    <a class="btn btn-app  shadow" id="btnCreateNewModel">
         <span class="badge bg-danger">@demModel</span>
-        <i class="fas fa-plus"></i> Model
+        <i style="color:green" class="fas fa-plus"></i> Model
     </a>
-    <a class="btn btn-app" id="btnCreateNewSoftName">
+    <a class="btn btn-app shadow" id="btnCreateNewSoftName">
         <span class="badge bg-danger">@demSoft </span>
-        <i class="fas fa-plus"></i> Phần mềm
+        <i style="color:green" class="fas fa-plus"></i> Phần mềm
     </a>
-    <a class="btn btn-app" id="btnUpload">
-        <i class="fas fa-upload"></i> Upload
+    <a class="btn btn-app shadow" id="btnUpload">
+        <i style="color:green" class="fas fa-upload"></i> Upload
     </a>
-    <a class="btn btn-app " id="btnQuanlytaikhoan">
+    <a class="btn btn-app shadow" id="btnXoatemps" data-id=@userid data-pwd=@userpwd>
+        <i style="color:rebeccapurple" class="fas fa-eraser"></i> Xoá Temps
+    </a>
+    <a class="btn btn-app shadow" id="btnRootfolder" data-id=@userid data-pwd=@userpwd>
+        <span class="badge" style=" font-size:larger"> 
+            <i style="color:black" class="fas fa-lock "></i>
+        </span>
+        <i style="color:orange" class="fas fa-folder-open"></i> Root folder
+    </a>
+    <a class="btn btn-app shadow" id="btnQuanlytaikhoan">
         <span class="badge bg-danger">@demUser</span>
-        <i class="fas fa-users"></i> Tài khoản
+        <i style="color:steelblue" class="fas fa-users"></i> Tài khoản
+    </a> 
+    <a class="btn btn-app shadow" id="btnMatkhau" data-id=@userid data-pwd=@userpwd>
+        <i style="color:steelblue" class="fas fa-lock"></i> Mật khẩu
     </a>
-    <a class="btn btn-app" id="btnMatkhau" data-id=@userid data-pwd=@userpwd>
-        <i class="fas fa-lock"></i> Mật khẩu
-    </a>
+   
 </div>
-
+<hr />
 
 <div class="row" style="margin-top:10px">
     <div id="modelList" class="col-lg-7">
@@ -162,3 +172,5 @@
 
 <script src="~/scripts/user/getlistuser.js"></script>
 <script src="~/scripts/editpassword.js"></script>
+<script src="~/scripts/cleartemps.js"></script>
+<script src="~/scripts/openrootfolder.js"></script>
