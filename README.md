@@ -22,6 +22,16 @@ Quán lý phiên bản các phần mềm trong công ty CEV
 
 ![7](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/af153d20-460c-48f4-9293-7d6159fd56ed)
 
+![a1](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/90784beb-ebd4-401f-90d3-b34e23ca96be)
+
+![a2](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/529e2865-53f2-4581-a135-584ee5ddc45a)
+
+![a3](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/f1f1d15c-2b2a-4f21-8d44-cb4ddf95bf0f)
+
+![a4](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/24cded0b-fa23-4d04-84a3-e8dca99c2c3f)
+
+![a5](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/2acb5572-ce00-4b7b-85be-217bd58b1095)
+
 ![8](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/46196867-f1fb-4d4a-b06b-139296e45b85)
 
 ![9](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/b7dfaecd-2ad7-49e9-920d-2a3edb9184e9)
