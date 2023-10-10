@@ -60,8 +60,9 @@
                                         <i class="fas fa-cog fa-fw"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:smaller">
-                                        @*                                        <a class="dropdown-item edit" href="#"><i class="fas fa-pen fa-fw"> </i> Chỉnh sửa</a>
-                                *@
+                                        <a class="dropdown-item changeNameModel" href="#" data-id="@item.Id">
+                                            <i style="color:orange" class="fas fa-pen fa-fw"></i> Đổi tên Model
+                                        </a>
                                         <a class="dropdown-item delete" href="#"><i style="color:red" class="fas fa-trash fa-fw"> </i> Xoá Model</a>
                                     </div>
                                 </div>
@@ -90,6 +91,9 @@
                                                                     <i class="fas fa-cog fa-fw"> </i>
                                                                 </button>
                                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:smaller">
+                                                                    <a class="dropdown-item changeNameModel" href="#" data-id="@chilModel.Id">
+                                                                        <i style="color:orange" class="fas fa-pen fa-fw"></i> Đổi tên Model
+                                                                    </a>
                                                                     <a class="dropdown-item delete" href="#"><i style="color:red" class="fas fa-trash fa-fw"> </i> Xoá Model</a>
                                                                 </div>
                                                             </div>
@@ -125,3 +129,4 @@
 
 <script src="~/scripts/GetListSoftware.js"></script>
 <script src="~/scripts/deletemodel.js"></script>
+<script src="~/scripts/changenamemodel.js"></script>

@@ -124,5 +124,33 @@ namespace SoftVersionControl.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> checkToChangeNameModel(int id)
+        {
+            var check = await _context.SoftNames.Where(x => x.ModelId == id).CountAsync();
+            if (check > 0)
+            {
+                return Json(new { success = false, mess = "Đã có dữ liệu" });
+            }
+            return Json(new { success = true, mess = "Có thể đổi tên" });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> changeNameModel(int id, string tenMoi)
+        {
+            var model = await _context.Models.Where(x => x.Id == id).FirstOrDefaultAsync();
+            string tencu = model.Name;
+            if (model != null)
+            {
+                model.Name = tenMoi;
+                await LuuLichSu("Edit", "Sửa tên Model " + tencu + " thành: " +tenMoi);
+                await _context.SaveChangesAsync();
+            }
+            return Json(new { success = true });
+        }
+
+
+
     }
 }

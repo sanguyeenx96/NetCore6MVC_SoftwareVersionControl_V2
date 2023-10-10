@@ -75,7 +75,7 @@ $(".btnDownload").on("click", function (e) {
                             })
                             .then((result) => {
                                 if (result.isConfirmed) {
-                                    var path  = result.value;
+                                    var path = result.value;
                                     downloadFile(path);
                                 } else if (
                                     result.dismiss === Swal.DismissReason.cancel

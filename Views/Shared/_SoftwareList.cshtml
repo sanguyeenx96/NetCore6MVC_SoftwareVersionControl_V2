@@ -6,12 +6,12 @@
         vertical-align: middle;
         text-align: center;
     }
-    #modalSuathongtinphanmem .modal-dialog {
+  /*  #modalSuathongtinphanmem .modal-dialog {
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-    }
+    }*/
     .table td, .table th {
         padding: 0.5rem;
     }
@@ -19,8 +19,11 @@
     div:where(.swal2-container) .swal2-html-container {
         overflow: hidden;
     }
+
+
 </style>
-<div class="modal-header" style="background:#F5F5F5">
+<div class="modal-header">
+ @*   style="background:#F5F5F5"*@
     <h4 class="modal-title" style="font-size:medium">
         <i style="color:#17A2B8" class="fa fa-th fa-fw" aria-hidden="true"></i>
         <span class="modal-title-content">???</span>
@@ -78,11 +81,11 @@
                                 <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-cog fa-fw"> </i>
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item btnEdit" href="#" data-id="@item.Id" data-name="@item.Name">
-                                        <i style="color:orange" class="fas fa-pen fa-fw"></i> Sửa thông tin
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-size:small">
+                                    <a class="dropdown-item changeNamePhanmem" href="#" data-id="@item.Id" data-modelid=@item.ModelId >
+                                        <i style="color:orange" class="fas fa-pen fa-fw"></i> Đổi tên phần mềm
                                     </a>
-                                    <a class="dropdown-item btnDelete" href="#" data-id="@item.Id">
+                                    <a class="dropdown-item deletePhanmem" href="#" data-id="@item.Id" data-modelid=@item.ModelId >
                                         <i style="color:red" class="fas fa-trash fa-fw"></i> Xoá phần mềm
                                     </a>
                                 </div>
@@ -95,28 +98,7 @@
     </table>
 </div>
 
-<div class="modal fade " id="modalSuathongtinphanmem">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header " style="background:#F5F5F5">
-                <h4 class="modal-title">
-                    <i class="fas fa-pen fa-fw"> </i>
-                    Sửa thông tin phần mềm
-                </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="modelContent_Suathongtinphanmem">
-                    <div class="overlay">
-                        <i class="fas fa-2x fa-sync fa-spin"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 
 <script>
@@ -151,4 +133,5 @@
 
 <script src="~/scripts/getallversionofsoftware.js"></script>
 <script src="~/scripts/download.js"></script>
-<script src="~/scripts/editsoftinfo.js"></script>
+<script src="~/scripts/deletesoft.js"></script>
+<script src="~/scripts/changenamesoft.js"></script>

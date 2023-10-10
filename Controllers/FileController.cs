@@ -192,6 +192,23 @@ namespace SoftVersionControl.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult ClearTemps()
+        {
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "temps");
+            try
+            {
+                // Xoá toàn bộ thư mục và tất cả các tệp con bên trong
+                Directory.Delete(folderPath, true);
+                return Json(new { success = true });
+            }
+            catch
+            {
+                return Json(new { success = false });
+            }
+        }
+
+        
 
     }
 }
