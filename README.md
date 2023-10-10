@@ -62,7 +62,7 @@ Dưới đây là mô tả cấu trúc cơ sở dữ liệu:
 - `SoftNameId`: Khóa ngoại đến bảng `SoftName`, kiểu số nguyên.
 - `SoftName`: SoftName liên quan (SoftName navigation property).
 
-
+# HÌnh ảnh Demo
 ![1](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/fed93326-581e-4c1d-b322-58e9d8412598)
 
 ![2](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/3cd1897c-9e4d-412d-88b2-4dd07c40c83a)
