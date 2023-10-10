@@ -32,10 +32,7 @@
     <a class="btn btn-app shadow" id="btnXoatemps" data-id=@userid data-pwd=@userpwd>
         <i style="color:rebeccapurple" class="fas fa-eraser"></i> Xoá Temps
     </a>
-    <a class="btn btn-app shadow" id="btnRootfolder" data-id=@userid data-pwd=@userpwd>
-        <span class="badge" style=" font-size:larger"> 
-            <i style="color:black" class="fas fa-lock "></i>
-        </span>
+    <a class="btn btn-app shadow" id="btnRootfolder" data-id=@userid data-pwd=@userpwd>       
         <i style="color:orange" class="fas fa-folder-open"></i> Root folder
     </a>
     <a class="btn btn-app shadow" id="btnQuanlytaikhoan">
@@ -49,7 +46,9 @@
 </div>
 <hr />
 
-<div class="row" style="margin-top:10px">
+<div class="row " style="margin-top:10px">
+    <partial name="_Chart" />
+
     <div id="modelList" class="col-lg-7">
         <div class="d-flex justify-content-center" style="margin-top:100px">
             <div class="spinner-border text-primary" style="width: 5rem; height: 5rem;" role="status">
@@ -57,7 +56,7 @@
         </div>
     </div>
 
-    <div class="col-lg-5">
+    <div class="col-lg-5 ">
         <div class="card ">
             <div class="card-header" style="background:#F5F5F5">
                 <h3 class="card-title">
@@ -67,10 +66,7 @@
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                        <i class="fas fa-expand"></i>
-                    </button>
+                    </button>                   
                 </div>
             </div>
             <!-- /.card-header -->
@@ -124,6 +120,9 @@
             </div>
         </div>
     </div>
+
+
+
 </div>
 
 @*Modal Danh sách phần mềm*@

@@ -66,7 +66,7 @@
     </style>
     <style>
         .body2 {
-            background-image: url('/rm380-16.jpg');
+            background-image: url('/2.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed; /* Giữ hình nền cố định khi cuộn trang */
@@ -76,7 +76,7 @@
 </head>
 <body class="hold-transition layout-top-nav layout-navbar-fixed " style="background:white">
     <div class="wrapper">
-        <nav class="main-header navbar navbar-expand-md navbar-light navbar-white" style="background:#F5F5F5">
+        <nav class="main-header navbar navbar-expand-lg navbar-light navbar-white" style="background:#F5F5F5">
             <div class="container">
                 <a class="navbar-brand">
                     <img src="~/layers2.png" alt="AdminLTE Logo" class="brand-image" style="opacity:0.9">
@@ -114,8 +114,8 @@
                     <li class="nav-item dropdown">
                         @if (role == "user")
                         {
-                            <button class="btn btn-secondary" data-toggle="dropdown" href="#">
-                                <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
+                            <button class="btn btn-default" data-toggle="dropdown" href="#">
+                                <i  class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
                                 @hoten.ToString()
                             </button>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -131,7 +131,7 @@
                         }
                         else
                         {
-                            <button class="btn btn-secondary" data-toggle="dropdown" href="#" >
+                            <button class="btn btn-default" data-toggle="dropdown" href="#">
                                 <i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>
                                 @hoten.ToString()
                             </button>
@@ -167,7 +167,7 @@
                 </div>
             </div>
             <div class="content">
-                <div class="container ">                
+                <div class="container ">
                     @RenderBody()
                     <br />
                 </div>

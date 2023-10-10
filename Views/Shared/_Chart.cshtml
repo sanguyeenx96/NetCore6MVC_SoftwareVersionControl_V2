@@ -1,0 +1,240 @@
+﻿@{
+    DateTime now = DateTime.Now;
+    DateTime firstDayOfWeek = now.Date; // Đặt ngày giờ thành 00:00:00 để bắt đầu từ đầu ngày
+    while (firstDayOfWeek.DayOfWeek != DayOfWeek.Sunday)
+    {
+        firstDayOfWeek = firstDayOfWeek.AddDays(-1);
+    }
+    DateTime lastDayOfWeek = firstDayOfWeek.AddDays(6); // Tuần có 7 ngày, nên cộng thêm 6 ngày để lấy ngày cuối cùng
+    TimeSpan thisWeek = lastDayOfWeek - firstDayOfWeek;
+    int truTuan = thisWeek.Days;
+
+
+    // Lấy ngày đầu tiên của tháng hiện tại
+    DateTime firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
+    // Lấy ngày cuối cùng của tháng hiện tại bằng cách lấy ngày đầu tiên của tháng sau đó trừ đi 1 ngày
+    DateTime lastDayOfMonth = new DateTime(now.Year, now.Month, 1).AddMonths(1).AddDays(-1);
+    // Tính toán khoảng thời gian cho tháng này
+    TimeSpan thisMonth = lastDayOfMonth - firstDayOfMonth;
+    // Lấy số ngày trong khoảng thời gian của tháng này
+    int truThang = thisMonth.Days;
+}
+<div class="col-md-12">
+    <div class="card">
+            <div class="card-header" style="background:#F5F5F5">
+            <h5 class="card-title" id="tieudebieudo">Báo cáo tóm tắt tuần này</h5>
+
+            <div class="card-tools">
+               
+                <div class="btn-group">
+                    <button type="button" class="btn btn-xs bg-gradient-secondary dropdown-toggle" data-toggle="dropdown">
+                        <i class="fas fa-calendar fa-fw"></i> Đổi chế độ xem
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        <a href="#" class="dropdown-item xemNgay">
+                            <i class="fas fa-calendar fa-fw"></i> Dữ liệu hôm nay
+                        </a>
+                        <a class="dropdown-divider"></a>
+                        <a href="#" class="dropdown-item xemTuan">
+                            <i  class="fas fa-calendar fa-fw"></i> Dữ liệu tuần này
+                        </a>
+                        <a class="dropdown-divider"></a>
+                        <a href="#" class="dropdown-item xemThang">
+                            <i  class="fas fa-calendar fa-fw"></i> Dữ liệu tháng này
+                        </a>
+                    </div>
+                </div>
+                             
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <p class="text-center" id="tungaytoingay">
+                        Từ @DateTime.Now.AddDays(-truTuan).ToString("dd/MM/yyyy") đến hôm nay @DateTime.Now.ToString("dd/MM/yyyy")
+                    </p>
+
+                    <div class="chart">
+                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                        <!-- Sales Chart Canvas -->
+                        <canvas id="myChart" height="188" style="height: 180px; display: block; width: 557px;" width="584" class="chartjs-render-monitor"></canvas>
+                    </div>
+                    <!-- /.chart-responsive -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4">
+                    <p class="text-center">
+                        Thống kê
+                    </p>
+
+                    <div class="progress-group">
+                        Tạo mới và cập nhật
+                        <span class="float-right" id="soCreate">0</span>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar bg-success" id="pbCreate" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- /.progress-group -->
+                    <div class="progress-group">
+                        <span class="progress-text">Xoá dữ liệu</span>
+                        <span class="float-right" id="soDelete">0</span>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar bg-danger" id="pbDelete" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- /.progress-group -->
+                    <div class="progress-group">
+                        Tải phần mềm
+                        <span class="float-right" id="soDownload">0</span>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar bg-purple" id="pbDownload" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- /.progress-group -->
+                    <div class="progress-group">
+                        Sửa đổi
+                        <span class="float-right" id="soEdit">0</span>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar bg-warning" id="pbEdit" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <!-- /.progress-group -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+    <!-- /.card -->
+</div>
+
+
+<script>
+    var songaytru;
+    $(document).ready(function(){
+        function fetchData(mode) {
+            $.ajax({
+                type: "GET",
+                url: "/History/CreateChart",
+                data: { mode: mode }, // Truyền giá trị mode vào dữ liệu AJAX
+                success: function (data) {
+                    var model = data.name;
+                    var soluong = data.count;
+
+                    var soluongCreate = soluong[0] ?? 0;
+                    var soluongDelete = soluong[1] ?? 0;
+                    var soluongDownload = soluong[2] ?? 0;
+                    var soluongEdit = soluong[3] ?? 0;
+
+                    var totalcount = soluongCreate + soluongDelete + soluongDownload + soluongEdit;
+                    var percentCreate = 0;
+                    var percentDelete = 0;
+                    var percentDownload = 0;
+                    var percentEdit = 0;
+
+                    if (totalcount !== 0) {
+                        percentCreate = (soluongCreate ?? 0) / totalcount * 100;
+                        percentDelete = (soluongDelete ?? 0) / totalcount * 100;
+                        percentDownload = (soluongDownload ?? 0) / totalcount * 100;
+                        percentEdit = (soluongEdit ?? 0) / totalcount * 100;
+                    }              
+
+                    var pC = percentCreate + "%";
+                    var pDe = percentDelete + "%";
+                    var pDo = percentDownload + "%";
+                    var pE = percentEdit + "%";
+
+                    $("#soCreate").text(soluongCreate + " lần");
+                    $("#soDelete").text(soluongDelete + " lần");
+                    $("#soDownload").text(soluongDownload + " lần");
+                    $("#soEdit").text(soluongEdit + " lần");
+
+                    $("#pbCreate").css("width", pC);
+                    $("#pbDelete").css("width", pDe);
+                    $("#pbDownload").css("width", pDo);
+                    $("#pbEdit").css("width", pE);
+
+                    console.log(model);
+                    console.log(soluong);
+
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: model,
+                            datasets: [{
+                                label: 'Số lượng sự cố ',
+                                data: soluong,
+                                backgroundColor: 'rgba(60,141,188,0.9)',
+                                borderColor: 'rgba(60,141,188,0.8)',
+                                pointRadius: false,
+                                pointColor: '#3b8bba',
+                                pointStrokeColor: 'rgba(60,141,188,1)',
+                                pointHighlightFill: '#fff',
+                                pointHighlightStroke: 'rgba(60,141,188,1)',
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            responsive: true,
+                            legend: {
+                                display: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    },
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                },
+                error: function () {
+                    Swal.fire(
+                        "Lỗi máy chủ",
+                        "Thao tác đã được huỷ bỏ!",
+                        "error"
+                    );
+                },
+            });
+        }
+
+        fetchData("tuan");
+
+        $(".xemNgay").click(function(){
+            fetchData("ngay");
+            $("#tungaytoingay").html("Hôm nay @DateTime.Now.ToString("dd/MM/yyyy")")
+            $("#tieudebieudo").text("Báo cáo tóm tắt hôm nay")
+
+        })
+        $(".xemTuan").click(function () {
+            fetchData("tuan");
+            $("#tungaytoingay").html("Từ  @DateTime.Now.AddDays(-truTuan).ToString("dd/MM/yyyy") đến hôm nay @DateTime.Now.ToString("dd/MM/yyyy")")
+            $("#tieudebieudo").text("Báo cáo tóm tắt tuần này")
+        })
+        $(".xemThang").click(function () {
+            fetchData("thang");
+            $("#tungaytoingay").html("Từ @DateTime.Now.AddDays(-truThang).ToString("dd/MM/yyyy") đến hôm nay @DateTime.Now.ToString("dd/MM/yyyy")")
+            $("#tieudebieudo").text("Báo cáo tóm tắt tháng này")
+        })
+
+    })
+</script>
+
+
+
+
+<script src="~/adminlte-master/plugins/chart.js/Chart.min.js"></script>

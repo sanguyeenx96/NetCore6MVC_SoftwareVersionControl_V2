@@ -79,34 +79,25 @@ namespace SoftVersionControl.Controllers
             return Json(new { success = true, data = pwd });
         }
 
-
         public IActionResult OpenFolderInWWWRoot()
         {
             try
             {
                 string wwwRootPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","uploads");
-
-                // Sử dụng Process.Start để mở thư mục trong Windows Explorer
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = "explorer.exe",
-                    Arguments = wwwRootPath
-                });
-
-                return Json(new { success = true });
+                string duongdan = wwwRootPath.ToString();
+                //// Sử dụng Process.Start để mở thư mục trong Windows Explorer
+                //Process.Start(new ProcessStartInfo
+                //{
+                //    FileName = "explorer.exe",
+                //    Arguments = wwwRootPath
+                //});
+                return Json(new { success = true, data = duongdan });
             }
             catch
             {
                 return Json(new { success = false });
             }
         }
-
-
-
-
-
-
-
 
         public IActionResult Index()
         {
@@ -121,7 +112,6 @@ namespace SoftVersionControl.Controllers
                .ToList();
             return View(recentActivities);
         }
-
 
         public IActionResult Privacy()
         {
