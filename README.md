@@ -8,6 +8,61 @@ Quán lý phiên bản các phần mềm trong công ty CEV
 + Quản lý lịch sử thao tác người dùng
 + Quản lý tài khoản người dùng, phân quyền tài khoản
 
+# Cấu Trúc Cơ Sở Dữ Liệu
+Dưới đây là mô tả cấu trúc cơ sở dữ liệu:
+
+## Bảng `Lichsu`
+
+- `Id`: Khóa chính của bảng, kiểu số nguyên.
+- `Ten`: Tên.
+- `Hanhdong`: Hành động.
+- `Thoigian`: Thời gian.
+- `Type`: Loại.
+
+## Bảng `Model`
+
+- `Id`: Khóa chính của bảng, kiểu số nguyên.
+- `ParentModelId`: Khóa ngoại đến bảng `Model` (Model cha), kiểu số nguyên.
+- `Name`: Tên Model (bắt buộc).
+- `ChildrenModel`: Danh sách các Model con (ICollection<Model>).
+- `ParentModel`: Model cha (Model navigation property).
+- `SoftNames`: Danh sách các SoftName liên quan (ICollection<SoftName>).
+
+## Bảng `Password`
+
+- `Id`: Khóa chính của bảng, kiểu số nguyên.
+- `Type`: Loại.
+- `Username`: Tên người dùng.
+- `Hoten`: Họ tên.
+- `Pwd`: Mật khẩu.
+- `Role`: Vai trò.
+
+## Bảng `SoftName`
+
+- `Id`: Khóa chính của bảng, kiểu số nguyên.
+- `Name`: Tên.
+- `ModelId`: Khóa ngoại đến bảng `Model` (Model cha), kiểu số nguyên.
+- `Model`: Model liên quan (Model navigation property).
+- `Softwares`: Danh sách các phần mềm liên quan (ICollection<Software>).
+
+## Bảng `Software`
+
+- `Id`: Khóa chính của bảng, kiểu số nguyên.
+- `Version`: Số phiên bản (bắt buộc).
+- `DiemThayDoi`: Điểm thay đổi.
+- `NgayApDung`: Ngày áp dụng.
+- `NguoiCaiDat`: Người cài đặt.
+- `NgayCaiDat`: Ngày cài đặt.
+- `SoLuongJigCaiDat`: Số lượng Jig cài đặt.
+- `NguoiXacNhan`: Người xác nhận (bắt buộc).
+- `TrangThaiApDung`: Trạng thái áp dụng (bắt buộc).
+- `Path`: Đường dẫn đến tệp.
+- `FileName`: Tên tệp.
+- `TimeCreated`: Ngày giờ tạo.
+- `SoftNameId`: Khóa ngoại đến bảng `SoftName`, kiểu số nguyên.
+- `SoftName`: SoftName liên quan (SoftName navigation property).
+
+
 ![1](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/fed93326-581e-4c1d-b322-58e9d8412598)
 
 ![2](https://github.com/sanguyeenx96/NetCore6MVC_SoftwareVersionControl_V2/assets/103011257/3cd1897c-9e4d-412d-88b2-4dd07c40c83a)
