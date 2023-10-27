@@ -1,4 +1,4 @@
-﻿$("#btnUpload").click(function () {
+$("#btnUpload").click(function () {
     const steps = ["1", "2"];
     const Queue = Swal.mixin({
         progressSteps: steps,
@@ -84,12 +84,12 @@
     }
 });
 
-
-
-
 function loadUploadSoftScript() {
     var script = document.createElement("script");
     script.src = "/Scripts/UploadSoft.js";
     script.type = "text/javascript";
     document.body.appendChild(script);
 }
+$("#modalThemphanmemmoi").on("hidden.bs.modal", function (e) {
+    window.location.reload();
+});
