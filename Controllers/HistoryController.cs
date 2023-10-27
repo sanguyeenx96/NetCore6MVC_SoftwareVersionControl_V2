@@ -23,10 +23,9 @@ namespace SoftVersionControl.Controllers
         public IActionResult CreateChart(string mode)
         {
             DateTime now = DateTime.Now;
-            var modeXem = DateTime.Now;
+            var modeXem = DateTime.Now.Date.AddHours(-10);
             if (mode == "ngay")
             {
-                modeXem = DateTime.Now;
             }
             if (mode == "tuan")
             {
@@ -61,7 +60,7 @@ namespace SoftVersionControl.Controllers
             var typeToRemove2 = "Upload";
 
             var typeCounts = _context.Lichsus
-                .Where(l => l.Thoigian >= modeXem) // Chỉ lấy dữ liệu từ ngày trong khoảng 1 tuần trở lại
+                .Where(l => l.Thoigian >= modeXem) 
                 .GroupBy(l => l.Type)
                 .Select(g => new
                 {
